@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context=".Show_Info">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar1"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:layout_alignParentStart="true"
+            android:titleTextColor="#ffffff"
+            />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Ambulance Id : "
+        android:id="@+id/info_AmbId"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/info_Uname" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Hospital Id: "
+        android:id="@+id/info_HospId"
+        android:layout_below="@+id/info_AmbId"
+        android:layout_alignStart="@+id/info_AmbId"
+        android:layout_marginTop="62dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="User Name :"
+        android:id="@+id/info_Uname"
+        android:layout_marginBottom="65dp"
+        android:layout_above="@+id/info_AmbId"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="53dp" />
+
+
+</RelativeLayout>
+

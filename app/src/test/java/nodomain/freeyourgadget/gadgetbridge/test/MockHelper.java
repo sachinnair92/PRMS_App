@@ -1,4 +1,4 @@
-package nodomain.freeyourgadget.gadgetbridge.test;
+package com.voodoo.PRMS_MiBand.test;
 
 import android.app.Application;
 import android.app.NotificationManager;
@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 
 import java.lang.reflect.Constructor;
 
-import nodomain.freeyourgadget.gadgetbridge.service.DeviceCommunicationService;
+import com.voodoo.GadgetBridgeFiles.service.DeviceCommunicationService;
 
 public class MockHelper {
     public <T extends Service> NotificationManager createNotificationManager(Context mContext) throws Exception {

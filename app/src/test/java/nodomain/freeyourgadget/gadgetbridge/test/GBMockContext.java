@@ -1,4 +1,4 @@
-package nodomain.freeyourgadget.gadgetbridge.test;
+package com.voodoo.PRMS_MiBand.test;
 
 import android.app.Application;
 import android.content.Context;

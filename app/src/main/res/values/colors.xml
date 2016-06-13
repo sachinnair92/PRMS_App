@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_light" type="color">#ff5000</color>
-    <color name="primarydark_light" type="color">#f0f03000</color>
+    <color name="primary_light" type="color">#ba3160</color>
+    <color name="primarydark_light" type="color">#b3325e</color>
 
     <color name="primary_dark" type="color">#f03000</color>
     <color name="primarydark_dark" type="color">#f0f03000</color>
@@ -25,5 +25,7 @@
 
     <color name="chart_not_worn_light" type="color">#545254</color>
     <color name="chart_not_worn_dark" type="color">#d8d9d8</color>
+
+    <color name="sinch_purple">#ff63029d</color>
 
 </resources>

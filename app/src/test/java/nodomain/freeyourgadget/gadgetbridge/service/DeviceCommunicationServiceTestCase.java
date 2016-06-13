@@ -1,6 +1,5 @@
-package nodomain.freeyourgadget.gadgetbridge.service;
+package com.voodoo.GadgetBridgeFiles.service;
 
-import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
 
@@ -10,10 +9,10 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import nodomain.freeyourgadget.gadgetbridge.GBException;
-import nodomain.freeyourgadget.gadgetbridge.impl.GBDevice;
-import nodomain.freeyourgadget.gadgetbridge.model.DeviceType;
-import nodomain.freeyourgadget.gadgetbridge.test.GBMockApplication;
+import com.voodoo.GadgetBridgeFiles.GBException;
+import com.voodoo.GadgetBridgeFiles.impl.GBDevice;
+import com.voodoo.GadgetBridgeFiles.model.DeviceType;
+import com.voodoo.PRMS_MiBand.test.GBMockApplication;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

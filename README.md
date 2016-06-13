@@ -9,7 +9,7 @@ need to create an account and transmit any of your data to the vendor's servers.
 
 ## Download
 
-[![Gadgetbridge on F-Droid](/Get_it_on_F-Droid.svg.png?raw=true "Download from F-Droid")](https://f-droid.org/repository/browse/?fdid=nodomain.freeyourgadget.gadgetbridge)
+[![Gadgetbridge on F-Droid](/Get_it_on_F-Droid.svg.png?raw=true "Download from F-Droid")](https://f-droid.org/repository/browse/?fdid=com.voodoo.PRMS_MiBand)
 
 [List of changes](CHANGELOG.md)
 
@@ -114,8 +114,9 @@ manually.
 1. Open Gadgetbridge's settings and check the option to write log files
 2. Quit Gadgetbridge and restart it
 3. Reproduce the problem you encountered
-4. Check the logfile at /sdcard/Android/data/nodomain.freeyourgadget.gadgetbridge/files/gadgetbridge.log
+4. Check the logfile at /sdcard/Android/data/com.voodoo.PRMS_MiBand/files/gadgetbridge.log
 5. File an issue at https://github.com/Freeyourgadget/Gadgetbridge/issues/new and possibly provide the logfile
 
 Alternatively you may use the standard logcat functionality to access the log.
 
+# PRMS_App

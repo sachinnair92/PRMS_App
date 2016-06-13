@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="horizontal"
+android:weightSum="1">
+
+
+    <ImageView
+    android:id="@+id/imageView1"
+    android:layout_gravity="center"
+        android:layout_marginLeft="4dp"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:src="@drawable/pulse1" />
+
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_weight="0.85">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Normal"
+        android:layout_marginTop="10dp"
+        android:id="@+id/cond_list_text"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="20/12/2014 6:51 am"
+        android:textColor="#b3325e"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/timestamp_list_text" />
+</LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="102"
+            android:textSize="25dp"
+            android:paddingBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:id="@+id/heartrate_list_text"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000" />
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_gravity="center"
+            android:layout_width="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/heartrate_bpm" />
+
+
+</LinearLayout>

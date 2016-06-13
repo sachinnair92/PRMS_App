@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nodomain.freeyourgadget.gadgetbridge">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.voodoo.PRMS_MiBand">
 
     <!--
         Comment in for testing Pebble Emulator
@@ -8,15 +9,10 @@
     -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.fsck.k9.permission.READ_MESSAGES" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature
         android:name="android.hardware.bluetooth"
@@ -28,43 +24,43 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+
     <application
-        android:name=".GBApplication"
-        android:allowBackup="false"
+        android:name="com.voodoo.GadgetBridgeFiles.GBApplication"
+        android:allowBackup="true"
         android:fullBackupContent="false"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/GadgetbridgeTheme">
+        android:largeHeap="true"
+        android:theme="@style/GadgetbridgeTheme"
+        tools:replace="android:icon,android:theme">
         <activity
-            android:name=".activities.ControlCenter"
-            android:label="@string/title_activity_controlcenter">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name="com.voodoo.GadgetBridgeFiles.activities.ControlCenter"
+            android:label="@string/title_activity_controlcenter" />
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.ControlCenter" />
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.ControlCenter" />
         <activity
-            android:name=".devices.miband.MiBandPreferencesActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.devices.miband.MiBandPreferencesActivity"
             android:label="@string/preferences_miband_settings"
-            android:parentActivityName=".activities.SettingsActivity" />
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.SettingsActivity" />
         <activity
-            android:launchMode="singleTop"
-            android:name=".activities.AppManagerActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.AppManagerActivity"
             android:label="@string/title_activity_appmanager"
-            android:parentActivityName=".activities.ControlCenter" />
+            android:launchMode="singleTop"
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.ControlCenter" />
         <activity
-            android:name=".activities.AppBlacklistActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.AppBlacklistActivity"
             android:label="@string/title_activity_appblacklist"
-            android:parentActivityName=".activities.SettingsActivity" />
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.SettingsActivity" />
         <activity
-            android:name=".activities.FwAppInstallerActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.FwAppInstallerActivity"
             android:label="@string/title_activity_fw_app_insaller"
-            android:parentActivityName=".activities.ControlCenter">
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.ControlCenter">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -184,74 +180,74 @@
         </activity>
 
         <service
-            android:name=".externalevents.NotificationListener"
+            android:name="com.voodoo.GadgetBridgeFiles.externalevents.NotificationListener"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-        <service android:name=".service.DeviceCommunicationService" />
+        <service android:name="com.voodoo.GadgetBridgeFiles.service.DeviceCommunicationService" />
 
         <receiver
-            android:name=".externalevents.BluetoothStateChangeReceiver"
+            android:name="com.voodoo.GadgetBridgeFiles.externalevents.BluetoothStateChangeReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".service.receivers.GBMusicControlReceiver"
+            android:name="com.voodoo.GadgetBridgeFiles.service.receivers.GBMusicControlReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="nodomain.freeyourgadget.gadgetbridge.musiccontrol" />
+                <action android:name="com.voodoo.PRMS_MiBand.musiccontrol" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".service.receivers.GBCallControlReceiver"
+            android:name="com.voodoo.GadgetBridgeFiles.service.receivers.GBCallControlReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="nodomain.freeyourgadget.gadgetbridge.callcontrol" />
+                <action android:name="com.voodoo.PRMS_MiBand.callcontrol" />
             </intent-filter>
         </receiver>
 
         <activity
-            android:name=".activities.DebugActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.DebugActivity"
             android:label="@string/title_activity_debug"
-            android:parentActivityName=".activities.ControlCenter"
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.ControlCenter"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.DiscoveryActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.DiscoveryActivity"
             android:label="@string/title_activity_discovery"
-            android:parentActivityName=".activities.ControlCenter" />
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.ControlCenter" />
         <activity
-            android:name=".activities.AndroidPairingActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.AndroidPairingActivity"
             android:label="@string/title_activity_android_pairing" />
         <activity
-            android:name=".devices.miband.MiBandPairingActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.devices.miband.MiBandPairingActivity"
             android:label="@string/title_activity_mi_band_pairing" />
         <activity
-            android:name=".activities.charts.ChartsActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.charts.ChartsActivity"
             android:label="@string/title_activity_charts"
-            android:parentActivityName=".activities.ControlCenter" />
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.ControlCenter" />
         <activity
-            android:name=".activities.ConfigureAlarms"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.ConfigureAlarms"
             android:label="@string/title_activity_set_alarm"
-            android:parentActivityName=".activities.SettingsActivity" />
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.SettingsActivity" />
         <activity
-            android:name=".activities.AlarmDetails"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.AlarmDetails"
             android:label="@string/title_activity_alarm_details"
-            android:parentActivityName=".activities.ConfigureAlarms" />
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.ConfigureAlarms" />
 
         <provider
-            android:name=".contentprovider.PebbleContentProvider"
+            android:name="com.voodoo.GadgetBridgeFiles.contentprovider.PebbleContentProvider"
             android:authorities="com.getpebble.android.provider"
             android:exported="true" />
 
-        <receiver android:name=".SleepAlarmWidget">
+        <receiver android:name="com.voodoo.GadgetBridgeFiles.SleepAlarmWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="nodomain.freeyourgadget.gadgetbridge.SLEEP_ALARM_WIDGET_CLICK" />
+                <action android:name="com.voodoo.PRMS_MiBand.SLEEP_ALARM_WIDGET_CLICK" />
             </intent-filter>
 
             <meta-data
@@ -260,20 +256,66 @@
         </receiver>
 
         <activity
-            android:name=".activities.ExternalPebbleJSActivity"
+            android:name="com.voodoo.GadgetBridgeFiles.activities.ExternalPebbleJSActivity"
             android:label="@string/app_configure"
-            android:parentActivityName=".activities.AppManagerActivity">
+            android:parentActivityName="com.voodoo.GadgetBridgeFiles.activities.AppManagerActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="nodomain.freeyourgadget.gadgetbridge.activities.ControlCenter" />
+                android:value="com.voodoo.GadgetBridgeFiles.activities.ControlCenter" />
+
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="gadgetbridge" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PRMS_DiscoverActivity"
+            android:label="Add a Device" />
+        <activity
+            android:name=".PRMS_MainActivity"
+            android:label="PRMS"
+            android:theme="@style/VoodooTheme" />
+        <activity android:name=".PRMS_MeasureHR" />
+        <activity
+            android:name=".LoginPage"
+            android:label="PRMS"
+            android:theme="@style/VoodooLoginTheme">
 
+        </activity>
+        <activity
+            android:name=".RegisterPage"
+            android:label="PRMS"
+            android:theme="@style/VoodooLoginTheme" />
+        <activity
+            android:name=".Add_New_Patient_Activity"
+            android:theme="@style/VoodooTheme" />
+        <activity
+            android:name=".Show_Info"
+            android:theme="@style/VoodooTheme" />
+        <activity
+            android:name=".AddPatientDetails"
+            android:theme="@style/VoodooTheme" />
+        <activity android:name=".EditPatientDetails" />
+        <activity
+            android:name=".Doctor_homePage"
+            android:theme="@style/VoodooTheme" />
+        <activity
+            android:name=".Show_Selected_Patient_Details"
+            android:theme="@style/VoodooTheme" />
+        <activity
+            android:name=".ShowHeartRate"
+            android:theme="@style/VoodooTheme"></activity>
+        <activity android:name=".MessageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
-</manifest>
+</manifest> <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen" -->

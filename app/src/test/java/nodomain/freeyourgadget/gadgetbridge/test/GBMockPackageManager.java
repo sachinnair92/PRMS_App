@@ -1,4 +1,4 @@
-package nodomain.freeyourgadget.gadgetbridge.test;
+package com.voodoo.PRMS_MiBand.test;
 
 import android.content.ComponentName;
 import android.test.mock.MockPackageManager;

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.voodoo.PRMS_MiBand.ShowHeartRate">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/show_heartrate_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_alignParentStart="true"
+        android:titleTextColor="#ffffff"
+        />
+
+    <pl.droidsonroids.gif.GifImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/circle3"
+        android:id="@+id/Circle_gif"
+        android:layout_below="@+id/show_heartrate_toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+
+
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/imageView6"
+        android:src="@drawable/small_heart"
+        android:layout_above="@+id/textView17"
+        android:layout_alignEnd="@+id/textView17"
+        android:layout_marginEnd="6dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="BPM"
+        android:layout_marginLeft="25dp"
+        android:id="@+id/textView17"
+        android:layout_alignBottom="@+id/HeartRateText"
+        android:layout_toEndOf="@+id/HeartRateText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=" Measured \n Heart rate"
+        android:id="@+id/textView20"
+        android:layout_marginTop="44dp"
+        android:layout_below="@+id/HeartRateText"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="50dp"
+        android:id="@+id/HeartRateText"
+        android:layout_marginTop="110dp"
+        android:layout_alignTop="@+id/Circle_gif"
+        android:layout_alignEnd="@+id/textView20" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/heartrate_list"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/Circle_gif"
+        android:layout_alignParentBottom="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Previously Measured Heart rates"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/textView21"
+        android:layout_below="@+id/Circle_gif"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

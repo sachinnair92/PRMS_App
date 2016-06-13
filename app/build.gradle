@@ -11,7 +11,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "nodomain.freeyourgadget.gadgetbridge"
+        applicationId "com.voodoo.PRMS_MiBand"
         minSdkVersion 19
         targetSdkVersion 23
 
@@ -54,6 +54,9 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
     compile 'com.github.pfichtner:durationformatter:0.1.1'
     compile 'de.cketti.library.changelog:ckchangelog:1.2.2'
+    compile 'com.github.joaocruz04:jsoap:1.0.0'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.16'
+    compile files('libs/sinch-android-rtc-3.6.2.jar')
 }
 
 check.dependsOn 'findbugs', 'pmd', 'lint'

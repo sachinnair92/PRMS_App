@@ -1,23 +1,21 @@
-package nodomain.freeyourgadget.gadgetbridge.service;
+package com.voodoo.GadgetBridgeFiles.service;
 
 import android.app.Application;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.preference.PreferenceManager;
 
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
 
-import nodomain.freeyourgadget.gadgetbridge.test.GBMockApplication;
-import nodomain.freeyourgadget.gadgetbridge.test.GBMockContext;
-import nodomain.freeyourgadget.gadgetbridge.test.GBMockPackageManager;
-import nodomain.freeyourgadget.gadgetbridge.test.MockHelper;
+import com.voodoo.PRMS_MiBand.test.GBMockApplication;
+import com.voodoo.PRMS_MiBand.test.GBMockContext;
+import com.voodoo.PRMS_MiBand.test.GBMockPackageManager;
+import com.voodoo.PRMS_MiBand.test.MockHelper;
 
 public abstract class AbstractServiceTestCase<T extends Service> {
     private static final int ID = -1; // currently not supported

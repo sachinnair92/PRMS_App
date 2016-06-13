@@ -1,4 +1,4 @@
-package nodomain.freeyourgadget.gadgetbridge.service.btle;
+package com.voodoo.GadgetBridgeFiles.service.btle;
 
 import junit.framework.TestCase;
 

@@ -1,15 +1,14 @@
-package nodomain.freeyourgadget.gadgetbridge.test;
+package com.voodoo.PRMS_MiBand.test;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.test.mock.MockApplication;
 
-import nodomain.freeyourgadget.gadgetbridge.GBEnvironment;
-import nodomain.freeyourgadget.gadgetbridge.util.GB;
-import nodomain.freeyourgadget.gadgetbridge.util.GBPrefs;
-import nodomain.freeyourgadget.gadgetbridge.util.Prefs;
+import com.voodoo.GadgetBridgeFiles.GBEnvironment;
+import com.voodoo.GadgetBridgeFiles.util.GB;
+import com.voodoo.GadgetBridgeFiles.util.GBPrefs;
+import com.voodoo.GadgetBridgeFiles.util.Prefs;
 
 public class GBMockApplication extends MockApplication {
     private static final String PREF_NAME = "testprefs";

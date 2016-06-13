@@ -1,4 +1,4 @@
-package nodomain.freeyourgadget.gadgetbridge.service;
+package com.voodoo.GadgetBridgeFiles.service;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -7,11 +7,11 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import nodomain.freeyourgadget.gadgetbridge.impl.GBDevice;
-import nodomain.freeyourgadget.gadgetbridge.model.Alarm;
-import nodomain.freeyourgadget.gadgetbridge.model.CallSpec;
-import nodomain.freeyourgadget.gadgetbridge.model.MusicSpec;
-import nodomain.freeyourgadget.gadgetbridge.model.NotificationSpec;
+import com.voodoo.GadgetBridgeFiles.impl.GBDevice;
+import com.voodoo.GadgetBridgeFiles.model.Alarm;
+import com.voodoo.GadgetBridgeFiles.model.CallSpec;
+import com.voodoo.GadgetBridgeFiles.model.MusicSpec;
+import com.voodoo.GadgetBridgeFiles.model.NotificationSpec;
 
 public class TestDeviceSupport extends AbstractDeviceSupport {
 

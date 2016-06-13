@@ -1,9 +1,9 @@
-package nodomain.freeyourgadget.gadgetbridge.service;
+package com.voodoo.GadgetBridgeFiles.service;
 
 import android.content.Intent;
 
-import nodomain.freeyourgadget.gadgetbridge.impl.GBDeviceService;
-import nodomain.freeyourgadget.gadgetbridge.test.GBMockIntent;
+import com.voodoo.GadgetBridgeFiles.impl.GBDeviceService;
+import com.voodoo.PRMS_MiBand.test.GBMockIntent;
 
 public class TestDeviceService extends GBDeviceService {
     private final AbstractServiceTestCase<?> mTestCase;
