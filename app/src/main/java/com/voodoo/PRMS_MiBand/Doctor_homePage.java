@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -366,6 +367,9 @@ public class Doctor_homePage extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+                                SQLiteDatabase db;
+                                db = openOrCreateDatabase("Credentials.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
+                                db.execSQL("DROP TABLE IF EXISTS Credentails");
                                 startActivity(intent);
                                 do_syn=0;
                                 finish();
@@ -388,7 +392,7 @@ public class Doctor_homePage extends AppCompatActivity {
         return true;
     }
 
-    @Override
+   /* @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setTitle("Logout ?")
@@ -408,6 +412,6 @@ public class Doctor_homePage extends AppCompatActivity {
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-    }
+    }*/
 
 }

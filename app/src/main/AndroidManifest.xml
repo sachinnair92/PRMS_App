@@ -284,11 +284,6 @@
             android:name=".LoginPage"
             android:label="PRMS"
             android:theme="@style/VoodooLoginTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".RegisterPage"
@@ -315,7 +310,18 @@
             android:theme="@style/VoodooTheme" />
         <activity android:name=".MessageActivity" />
         <activity android:name=".Amb_MessageActivity" />
-        <activity android:name=".splashscreen"></activity>
+        <activity android:name=".splashscreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest> <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen" -->

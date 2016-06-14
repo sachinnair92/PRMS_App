@@ -4,6 +4,7 @@ package com.voodoo.PRMS_MiBand;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -99,6 +100,10 @@ public class Add_New_Patient_Activity extends AppCompatActivity {
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+
+                                SQLiteDatabase db;
+                                db = openOrCreateDatabase("Credentials.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
+                                db.execSQL("DROP TABLE IF EXISTS Credentails");
                                 startActivity(intent);
                                 finish();
                             }
@@ -120,7 +125,7 @@ public class Add_New_Patient_Activity extends AppCompatActivity {
         }
          return true;
     }
-
+/*
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -140,7 +145,7 @@ public class Add_New_Patient_Activity extends AppCompatActivity {
                 .show();
     }
 
-
+*/
 
 
 }

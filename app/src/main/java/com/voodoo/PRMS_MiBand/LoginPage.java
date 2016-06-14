@@ -234,20 +234,6 @@ class SoapCall_Login extends AsyncTask<String, Integer, Long> {
                                 e.printStackTrace();
                             }
 
-                            Cursor cursor = db.rawQuery("select * from Credentails",null);
-
-                            if (cursor.moveToFirst()) {
-
-                                while (cursor.isAfterLast() == false) {
-                                    System.out.println(cursor.getString(cursor.getColumnIndex("uname")));
-                                    System.out.println(cursor.getString(cursor.getColumnIndex("tou")));
-                                    System.out.println(cursor.getString(cursor.getColumnIndex("ambulance_id")));
-                                    System.out.println(cursor.getString(cursor.getColumnIndex("hospital_name")));
-                                    cursor.moveToNext();
-                                }
-                            }
-
-
                             lp.startActivity(intent);
                             lp.finish();
                         }
@@ -256,6 +242,25 @@ class SoapCall_Login extends AsyncTask<String, Integer, Long> {
                             intent.putExtra("tou", type_of_user);
                             intent.putExtra("hospital_name",hospital_name);
                             intent.putExtra("uname", Uname);
+
+                            SQLiteDatabase db;
+                            db = lp.openOrCreateDatabase("Credentials.db", SQLiteDatabase.CREATE_IF_NECESSARY, null);
+                            db.execSQL("DROP TABLE IF EXISTS Credentails");
+                            try {
+                                final String CREATE_TABLE_CONTAIN = "CREATE TABLE IF NOT EXISTS Credentails ("
+                                        + "uname TEXT,"
+                                        + "tou TEXT,"
+                                        + "ambulance_id TEXT,"
+                                        + "hospital_name TEXT);";
+                                db.execSQL(CREATE_TABLE_CONTAIN);
+                                String sql = "INSERT or replace INTO Credentails (uname, tou, ambulance_id, hospital_name) VALUES('"+uname+"','"+type_of_user+"','null','"+hospital_name+"')" ;
+                                db.execSQL(sql);
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
                             lp.startActivity(intent);
                             lp.finish();
                         }else
