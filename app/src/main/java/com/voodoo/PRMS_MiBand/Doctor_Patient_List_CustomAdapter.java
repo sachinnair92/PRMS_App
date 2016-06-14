@@ -31,6 +31,9 @@ public class Doctor_Patient_List_CustomAdapter extends BaseAdapter{
     String string_doc;
     Context context;
     Doctor_homePage dh;
+
+    int Is_empty=0;
+
     private static LayoutInflater inflater=null;
     public Doctor_Patient_List_CustomAdapter(Doctor_homePage mainActivity, ArrayList<String> PatientName,ArrayList<String> PatientCond, ArrayList<String> AmbulanceId,ArrayList<String> PatientId,String type_of_user,String hospital_name,String uname,String string_doc) {
         // TODO Auto-generated constructor stub
@@ -46,7 +49,12 @@ public class Doctor_Patient_List_CustomAdapter extends BaseAdapter{
         this.dh=mainActivity;
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Is_empty=0;
     }
+
+
+
+
     @Override
     public int getCount() {
         // TODO Auto-generated method stub

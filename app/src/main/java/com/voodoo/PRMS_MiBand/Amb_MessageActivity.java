@@ -456,12 +456,18 @@ public class Amb_MessageActivity extends AppCompatActivity {
     static Amb_MessageActivity ama;
 
 
-    String type_of_user;
-    String hospital_name;
+
     String uname;
     String P_id;
-    String string_doc;
+    String tou;
     String ambulance_id;
+    String hospital_name;
+    String pt_name;
+    String pt_bloodgrp;
+    String pt_prob;
+    String pt_gender;
+    String pt_cond;
+    String pt_policecase;
 
 
     static String hospital_name1;
@@ -516,13 +522,24 @@ public class Amb_MessageActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        Intent intent = getIntent();
-        type_of_user = intent.getStringExtra("tou");
-        hospital_name = intent.getStringExtra("hospital_name");
-        uname = intent.getStringExtra("uname");
-        P_id = intent.getStringExtra("P_id");
-        string_doc = intent.getStringExtra("string_doc");
-        ambulance_id = intent.getStringExtra("ambulance_id");
+        Intent i=getIntent();
+
+        uname=i.getStringExtra("uname");
+
+        P_id=i.getStringExtra("P_id");
+        tou=i.getStringExtra("tou");
+        ambulance_id=i.getStringExtra("ambulance_id");
+        hospital_name=i.getStringExtra("hospital_name");
+        uname=i.getStringExtra("uname");
+        pt_name=i.getStringExtra("pt_name");
+        pt_bloodgrp=i.getStringExtra("pt_bloodgrp");
+        pt_prob=i.getStringExtra("pt_prob");
+        pt_gender=i.getStringExtra("pt_gender");
+        pt_cond=i.getStringExtra("pt_cond");
+        pt_policecase=i.getStringExtra("pt_policecase");
+
+
+
 
         populateMessageHistory();
 
@@ -534,13 +551,18 @@ public class Amb_MessageActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(getApplicationContext(), Show_Selected_Patient_Details.class);
-                intent.putExtra("tou", type_of_user);
-                intent.putExtra("hospital_name", hospital_name);
-                intent.putExtra("uname", uname);
+                Intent intent = new Intent(getApplicationContext(), PRMS_MainActivity.class);
                 intent.putExtra("P_id", P_id);
-                intent.putExtra("string_doc", string_doc);
-                do_sync=0;
+                intent.putExtra("tou", tou);
+                intent.putExtra("ambulance_id", ambulance_id);
+                intent.putExtra("hospital_name",hospital_name);
+                intent.putExtra("uname",uname);
+                intent.putExtra("pt_name",pt_name);
+                intent.putExtra("pt_bloodgrp",pt_bloodgrp);
+                intent.putExtra("pt_prob",pt_prob);
+                intent.putExtra("pt_gender",pt_gender);
+                intent.putExtra("pt_cond",pt_cond);
+                intent.putExtra("pt_policecase",pt_policecase);
                 startActivity(intent);
                 finish();
                 break;
@@ -550,13 +572,18 @@ public class Amb_MessageActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), Show_Selected_Patient_Details.class);
-        intent.putExtra("tou", type_of_user);
-        intent.putExtra("hospital_name", hospital_name);
-        intent.putExtra("uname", uname);
+        Intent intent = new Intent(getApplicationContext(), PRMS_MainActivity.class);
         intent.putExtra("P_id", P_id);
-        intent.putExtra("string_doc", string_doc);
-        do_sync=0;
+        intent.putExtra("tou", tou);
+        intent.putExtra("ambulance_id", ambulance_id);
+        intent.putExtra("hospital_name",hospital_name);
+        intent.putExtra("uname",uname);
+        intent.putExtra("pt_name",pt_name);
+        intent.putExtra("pt_bloodgrp",pt_bloodgrp);
+        intent.putExtra("pt_prob",pt_prob);
+        intent.putExtra("pt_gender",pt_gender);
+        intent.putExtra("pt_cond",pt_cond);
+        intent.putExtra("pt_policecase",pt_policecase);
         startActivity(intent);
         finish();
     }
@@ -588,7 +615,7 @@ public class Amb_MessageActivity extends AppCompatActivity {
                             ama.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    AsyncTask task = new SoapCall_Amb_GetMessages(ama,hospital_name1,ambulance_id1,P_id1,uname1,"Yes",ama.getMessageAdapter()).execute();
+                                    AsyncTask task = new SoapCall_Amb_GetMessages(ama, hospital_name1, ambulance_id1, P_id1, uname1, "Yes", ama.getMessageAdapter()).execute();
                                 }
                             });
                            // System.out.println("thread updating");

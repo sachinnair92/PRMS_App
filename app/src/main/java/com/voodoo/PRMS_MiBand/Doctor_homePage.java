@@ -1,14 +1,21 @@
 package com.voodoo.PRMS_MiBand;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.RemoteInput;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +23,9 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +58,8 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
     String hospital_name;
     String uname;
     String Issilent;
+    static ArrayList<String> al=new ArrayList<String>();
+    static int first=0;
 
     SoapCall_GetPatients(Doctor_homePage dhp,String Hospital_Name,String type_of_user,String hospital_name,String uname,String Issilent){
         dialog = new ProgressDialog(dhp);
@@ -157,6 +169,8 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
     ArrayList<String> AmbulanceId;
     ArrayList<String> PatientId;
 
+    boolean showNotification=false;
+
     void Check()
     {
 
@@ -190,6 +204,7 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
                 if (result.equals("true")) {
 
                     int count =Integer.parseInt(doc.getElementsByTagName("count").item(0).getChildNodes().item(0).getNodeValue());
+                    showNotification=false;
                     if(count>0)
                     {
                        // ListView lv=(ListView) dhp.findViewById(R.id.DoctorlistView);
@@ -199,7 +214,13 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
                             AmbulanceId.add(String.valueOf(doc.getElementsByTagName("Patient_" + i).item(0).getChildNodes().item(1).getChildNodes().item(0).getNodeValue()));
                             PatientName.add(String.valueOf(doc.getElementsByTagName("Patient_" + i).item(0).getChildNodes().item(2).getChildNodes().item(0).getNodeValue()));
                             PatientCond.add(String.valueOf(doc.getElementsByTagName("Patient_" + i).item(0).getChildNodes().item(6).getChildNodes().item(0).getNodeValue()));
-                            PatientId.add(String.valueOf(doc.getElementsByTagName("Patient_" + i).item(0).getChildNodes().item(3).getChildNodes().item(0).getNodeValue()));
+                            String ppid=String.valueOf(doc.getElementsByTagName("Patient_" + i).item(0).getChildNodes().item(3).getChildNodes().item(0).getNodeValue());
+                            PatientId.add(ppid);
+
+                            if(!al.contains(ppid)){
+                                al.add(ppid);
+                                showNotification=true;
+                            }
                         }
 
                         for(int i=0;i<count;i++)
@@ -233,11 +254,25 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
 
                         lv.setAdapter(new Doctor_Patient_List_CustomAdapter(dhp, PatientName, PatientCond, AmbulanceId, PatientId, type_of_user, hospital_name, uname, convertDocumentToString(doc)));
 
-                    }
-                }else
-                {
+                        System.out.println("first is"+first);
+                        if(showNotification && first==1)
+                        {
+                            dhp.showNotification();
+                            showNotification=false;
+                        }
 
+
+                    }else {
+
+                    }
+                    first=1;
+                }else if(result.equals("false"))
+                {
+                    ListView lv=(ListView) dhp.findViewById(R.id.DoctorlistView);
+                    lv.setAdapter(null);
+                    first=1;
                 }
+
 
             }
         });
@@ -390,6 +425,48 @@ public class Doctor_homePage extends AppCompatActivity {
             e.printStackTrace();
         }
         return true;
+    }
+
+
+
+    public void showNotification() {
+        Intent notificationIntent = new Intent(getApplicationContext(), Doctor_homePage.class);
+        notificationIntent.putExtra("tou", type_of_user);
+        notificationIntent.putExtra("hospital_name", hospital_name);
+        notificationIntent.putExtra("uname", uname);
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                notificationIntent, 0);
+
+        NotificationManager nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        RemoteInput remoteInput = new RemoteInput.Builder("reply")
+                .build();
+
+        Intent replyIntent = new Intent("com.voodoo.PRMS_MiBand.DebugActivity.action.reply");
+
+        PendingIntent replyPendingIntent = PendingIntent.getBroadcast(this, 0, replyIntent, 0);
+
+        NotificationCompat.Action action =
+                new NotificationCompat.Action.Builder(android.R.drawable.ic_input_add, "Reply", replyPendingIntent)
+                        .addRemoteInput(remoteInput)
+                        .build();
+
+        NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender().addAction(action);
+
+        NotificationCompat.Builder ncomp = new NotificationCompat.Builder(this)
+                .setContentTitle("WebPRMS")
+                .setContentText("A new patient has been added")
+                .setTicker("A new patient has been added")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .extend(wearableExtender);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        ncomp.setSound(alarmSound);
+
+        nManager.notify((int) System.currentTimeMillis(), ncomp.build());
     }
 
    /* @Override
