@@ -312,10 +312,9 @@
             android:theme="@style/VoodooTheme" />
         <activity
             android:name=".ShowHeartRate"
-            android:theme="@style/VoodooTheme"></activity>
-        <activity android:name=".MessageActivity">
-
-        </activity>
+            android:theme="@style/VoodooTheme" />
+        <activity android:name=".MessageActivity"></activity>
+        <activity android:name=".Amb_MessageActivity"></activity>
     </application>
 
 </manifest> <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen" -->

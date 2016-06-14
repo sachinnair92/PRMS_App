@@ -251,7 +251,6 @@ public class EditPatientDetails extends AppCompatActivity {
 
 
     String uname;
-
     String P_id;
     String tou;
     String ambulance_id;
