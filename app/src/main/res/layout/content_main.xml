@@ -73,7 +73,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/sendmessage"
+        android:id="@+id/sendmessage_image"
         android:src="@drawable/message"
         android:layout_above="@+id/last_measured_hr"
         android:layout_centerHorizontal="true"
@@ -86,8 +86,8 @@
         android:text="Send Doctor Message"
         android:textColor="#b3325e"
         android:id="@+id/textView23"
-        android:layout_marginTop="52dp"
         android:layout_alignTop="@+id/sendmessage_image"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="49dp" />
 
 </RelativeLayout>

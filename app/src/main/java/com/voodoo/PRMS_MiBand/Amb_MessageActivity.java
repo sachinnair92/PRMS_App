@@ -1,6 +1,7 @@
 package com.voodoo.PRMS_MiBand;
 
 
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.voodoo.GadgetBridgeFiles.GBApplication;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -41,8 +44,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-
-
+import pl.droidsonroids.gif.GifDrawable;
 
 
 class SoapCall_Amb_GetMessages extends AsyncTask<String, Integer, Long> {
@@ -63,9 +65,9 @@ class SoapCall_Amb_GetMessages extends AsyncTask<String, Integer, Long> {
     String Uname;
 
     MessageAdapter messageAdapter;
+    String Issilent;
 
-
-    SoapCall_Amb_GetMessages(Amb_MessageActivity ama,String Hospital_Name,String ambulance_id,String P_id,String Uname,MessageAdapter messageAdapter){
+    SoapCall_Amb_GetMessages(Amb_MessageActivity ama,String Hospital_Name,String ambulance_id,String P_id,String Uname,String Issilent,MessageAdapter messageAdapter){
         dialog = new ProgressDialog(ama);
         // dialog.setTitle("Processing...");
         dialog.setMessage(Html.fromHtml("Retrieving Messages. Please wait..."));
@@ -77,6 +79,7 @@ class SoapCall_Amb_GetMessages extends AsyncTask<String, Integer, Long> {
         this.ama=ama;
         this.messageAdapter=messageAdapter;
         this.Uname=Uname;
+        this.Issilent=Issilent;
     }
 
     @Override
@@ -85,25 +88,34 @@ class SoapCall_Amb_GetMessages extends AsyncTask<String, Integer, Long> {
             Check();
         }
         catch(Exception e){
-            ama.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast toast = Toast.makeText(ama.getApplicationContext(), "Some error occurred. Please try again", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            });
+            if(Issilent.equals("No")) {
+                ama.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast = Toast.makeText(ama.getApplicationContext(), "Some error occurred. Please try again", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
+            }
             e.printStackTrace();
         }
         return null;
     }
 
     protected void onPreExecute() {
-        dialog.show();
+        if(Issilent.equals("No"))
+        {
+            dialog.show();
+        }
     }
 
 
     protected void onPostExecute(Long result) {
-        dialog.dismiss();
+        if(Issilent.equals("No"))
+        {
+            dialog.dismiss();
+        }
+
     }
 
     Document get_Messages(){
@@ -168,8 +180,7 @@ class SoapCall_Amb_GetMessages extends AsyncTask<String, Integer, Long> {
 
     void Check()
     {
-
-        if(!isNetworkAvailable())
+        if(!isNetworkAvailable() &&Issilent.equals("No"))
         {
             ama.runOnUiThread(new Runnable() {
                 @Override
@@ -199,8 +210,9 @@ class SoapCall_Amb_GetMessages extends AsyncTask<String, Integer, Long> {
                     if(count>0)
                     {
 
-                        // ListView lv=(ListView) ama.findViewById(R.id.DoctorlistView);
-                        // lv.setAdapter(new Doctor_Patient_List_CustomAdapter(ama, PatientNameList, PatientCondList, AmbulanceList));
+                        MessageAdapter messageAdapter= new MessageAdapter(ama);
+                        ListView lv=ama.getMessagesList();
+
                         for(int i=0;i<count;i++)
                         {
                             S_uname=doc.getElementsByTagName("Message_" + i).item(0).getChildNodes().item(0).getChildNodes().item(0).getNodeValue();
@@ -222,14 +234,15 @@ class SoapCall_Amb_GetMessages extends AsyncTask<String, Integer, Long> {
                             }
 
 
-                            System.out.println("\nS_uname: "+S_uname+" S_time: "+S_time+" R_hosp_name: "+R_hosp_name+" R_amb_id: "+R_amb_id+" R_pid: "+R_pid+" msg: "+msg+" Is_amb: "+Is_amb);
+                           // System.out.println("\nS_uname: "+S_uname+" S_time: "+S_time+" R_hosp_name: "+R_hosp_name+" R_amb_id: "+R_amb_id+" R_pid: "+R_pid+" msg: "+msg+" Is_amb: "+Is_amb);
                         }
+
+                        ama.setMessageAdapter(messageAdapter);
+                        lv.setAdapter(ama.getMessageAdapter());
 
                     }
                 }else
                 {
-                    Toast toast = Toast.makeText(ama.getApplicationContext(), "Some error Occurred. Please try again", Toast.LENGTH_LONG);
-                    toast.show();
                 }
 
             }
@@ -395,7 +408,7 @@ class SoapCall_Amb_SendMessage extends AsyncTask<String, Integer, Long> {
                 }
                 if (result.equals("true")) {
                     System.out.println("added");
-                    messageAdapter.addMessage(msg, Uname,timestamp,"Yes",MessageAdapter.DIRECTION_OUTGOING);
+                    messageAdapter.addMessage(msg, Uname,timestamp,"No", MessageAdapter.DIRECTION_OUTGOING);
                 }else
                 {
                     System.out.println("not added");
@@ -440,22 +453,42 @@ public class Amb_MessageActivity extends AppCompatActivity {
     private String messageBody;
     private MessageAdapter messageAdapter;
     private ListView messagesList;
+    static Amb_MessageActivity ama;
 
 
+    String type_of_user;
+    String hospital_name;
     String uname;
     String P_id;
-    String tou;
+    String string_doc;
     String ambulance_id;
-    String hospital_name;
-    String pt_name;
-    String pt_bloodgrp;
-    String pt_prob;
-    String pt_gender;
-    String pt_cond;
-    String pt_policecase;
 
-   
-    
+
+    static String hospital_name1;
+    static String ambulance_id1;
+    static String P_id1;
+    static String uname1;
+
+    static Thread syncThread=null;
+
+    static int do_sync=0;
+
+    public MessageAdapter getMessageAdapter() {
+        return messageAdapter;
+    }
+
+    public void setMessageAdapter(MessageAdapter messageAdapter) {
+        this.messageAdapter = messageAdapter;
+    }
+
+    public void setMessagesList(ListView messagesList) {
+        this.messagesList = messagesList;
+    }
+
+    public ListView getMessagesList() {
+        return messagesList;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -483,20 +516,13 @@ public class Amb_MessageActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        Intent i=getIntent();
-
-        uname=i.getStringExtra("uname");
-        P_id=i.getStringExtra("P_id");
-        tou=i.getStringExtra("tou");
-        ambulance_id=i.getStringExtra("ambulance_id");
-        hospital_name=i.getStringExtra("hospital_name");
-        uname=i.getStringExtra("uname");
-        pt_name=i.getStringExtra("pt_name");
-        pt_bloodgrp=i.getStringExtra("pt_bloodgrp");
-        pt_prob=i.getStringExtra("pt_prob");
-        pt_gender=i.getStringExtra("pt_gender");
-        pt_cond=i.getStringExtra("pt_cond");
-        pt_policecase=i.getStringExtra("pt_policecase");
+        Intent intent = getIntent();
+        type_of_user = intent.getStringExtra("tou");
+        hospital_name = intent.getStringExtra("hospital_name");
+        uname = intent.getStringExtra("uname");
+        P_id = intent.getStringExtra("P_id");
+        string_doc = intent.getStringExtra("string_doc");
+        ambulance_id = intent.getStringExtra("ambulance_id");
 
         populateMessageHistory();
 
@@ -508,18 +534,13 @@ public class Amb_MessageActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(getApplicationContext(), PRMS_MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Show_Selected_Patient_Details.class);
+                intent.putExtra("tou", type_of_user);
+                intent.putExtra("hospital_name", hospital_name);
+                intent.putExtra("uname", uname);
                 intent.putExtra("P_id", P_id);
-                intent.putExtra("tou", tou);
-                intent.putExtra("ambulance_id", ambulance_id);
-                intent.putExtra("hospital_name",hospital_name);
-                intent.putExtra("uname",uname);
-                intent.putExtra("pt_name",pt_name);
-                intent.putExtra("pt_bloodgrp",pt_bloodgrp);
-                intent.putExtra("pt_prob",pt_prob);
-                intent.putExtra("pt_gender",pt_gender);
-                intent.putExtra("pt_cond",pt_cond);
-                intent.putExtra("pt_policecase",pt_policecase);
+                intent.putExtra("string_doc", string_doc);
+                do_sync=0;
                 startActivity(intent);
                 finish();
                 break;
@@ -529,18 +550,13 @@ public class Amb_MessageActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getApplicationContext(), PRMS_MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Show_Selected_Patient_Details.class);
+        intent.putExtra("tou", type_of_user);
+        intent.putExtra("hospital_name", hospital_name);
+        intent.putExtra("uname", uname);
         intent.putExtra("P_id", P_id);
-        intent.putExtra("tou", tou);
-        intent.putExtra("ambulance_id", ambulance_id);
-        intent.putExtra("hospital_name",hospital_name);
-        intent.putExtra("uname",uname);
-        intent.putExtra("pt_name",pt_name);
-        intent.putExtra("pt_bloodgrp",pt_bloodgrp);
-        intent.putExtra("pt_prob",pt_prob);
-        intent.putExtra("pt_gender",pt_gender);
-        intent.putExtra("pt_cond",pt_cond);
-        intent.putExtra("pt_policecase",pt_policecase);
+        intent.putExtra("string_doc", string_doc);
+        do_sync=0;
         startActivity(intent);
         finish();
     }
@@ -552,8 +568,44 @@ public class Amb_MessageActivity extends AppCompatActivity {
         ListView messagesList = (ListView) findViewById(R.id.listMessages);
         messagesList.setAdapter(messageAdapter);
 
-        AsyncTask task = new SoapCall_Amb_GetMessages(Amb_MessageActivity.this,hospital_name,ambulance_id,P_id,uname,messageAdapter).execute();
+        do_sync=1;
+        hospital_name1=hospital_name;
+        ambulance_id1=ambulance_id;
+        P_id1=P_id;
+        uname1=uname;
 
+        ama=Amb_MessageActivity.this;
+        AsyncTask task = new SoapCall_Amb_GetMessages(Amb_MessageActivity.this,hospital_name,ambulance_id,P_id,uname,"No",messageAdapter).execute();
+
+
+        syncThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        sleep(3000);
+                        if(do_sync==1) {
+                            ama.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AsyncTask task = new SoapCall_Amb_GetMessages(ama,hospital_name1,ambulance_id1,P_id1,uname1,"Yes",ama.getMessageAdapter()).execute();
+                                }
+                            });
+                           // System.out.println("thread updating");
+                        }else
+                        {
+                            break;
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        syncThread.start();
+        // messageAdapter.addMessage("Heloooz",uname,"3:12", MessageAdapter.DIRECTION_OUTGOING);
+
+        //  messageAdapter.addMessage("voodoo",uname,"3:12", MessageAdapter.DIRECTION_INCOMING);
 
     }
 
@@ -575,4 +627,3 @@ public class Amb_MessageActivity extends AppCompatActivity {
         super.onDestroy();
     }
 }
-

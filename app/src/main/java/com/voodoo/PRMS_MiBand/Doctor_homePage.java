@@ -46,8 +46,9 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
     String type_of_user;
     String hospital_name;
     String uname;
+    String Issilent;
 
-    SoapCall_GetPatients(Doctor_homePage dhp,String Hospital_Name,String type_of_user,String hospital_name,String uname){
+    SoapCall_GetPatients(Doctor_homePage dhp,String Hospital_Name,String type_of_user,String hospital_name,String uname,String Issilent){
         dialog = new ProgressDialog(dhp);
         // dialog.setTitle("Processing...");
         dialog.setMessage(Html.fromHtml("Retrieving Patient List. Please wait..."));
@@ -58,6 +59,7 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
         this.hospital_name=hospital_name;
         this.uname=uname;
         this.dhp=dhp;
+        this.Issilent=Issilent;
     }
 
     @Override
@@ -79,12 +81,19 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
     }
 
     protected void onPreExecute() {
-        dialog.show();
+        if(Issilent.equals("No"))
+        {
+            dialog.show();
+        }
     }
 
 
     protected void onPostExecute(Long result) {
-        dialog.dismiss();
+        if(Issilent.equals("No"))
+        {
+            dialog.dismiss();
+        }
+
     }
 
     Document get_patient(){
@@ -150,7 +159,7 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
     void Check()
     {
 
-        if(!isNetworkAvailable())
+        if(!isNetworkAvailable() && Issilent.equals("No"))
         {
             dhp.runOnUiThread(new Runnable() {
                 @Override
@@ -218,12 +227,15 @@ class SoapCall_GetPatients extends AsyncTask<String, Integer, Long> {
                         }
 
                         ListView lv=(ListView) dhp.findViewById(R.id.DoctorlistView);
-                        lv.setAdapter(new Doctor_Patient_List_CustomAdapter(dhp, PatientName, PatientCond, AmbulanceId,PatientId,type_of_user, hospital_name,uname,convertDocumentToString(doc)));
+                        System.out.println("refreshing");
+
+
+                        lv.setAdapter(new Doctor_Patient_List_CustomAdapter(dhp, PatientName, PatientCond, AmbulanceId, PatientId, type_of_user, hospital_name, uname, convertDocumentToString(doc)));
+
                     }
                 }else
                 {
-                    Toast toast = Toast.makeText(dhp.getApplicationContext(), "Some error Occurred. Please try again", Toast.LENGTH_LONG);
-                    toast.show();
+
                 }
 
             }
@@ -262,6 +274,15 @@ public class Doctor_homePage extends AppCompatActivity {
     String type_of_user;
     String hospital_name;
     String uname;
+    static Thread syncPatientListThread=null;
+
+    static Doctor_homePage dhp;
+
+    static String hospital_name1;
+    static String type_of_user1;
+    static String uname1;
+
+    static int do_syn=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,7 +303,43 @@ public class Doctor_homePage extends AppCompatActivity {
         wt.setText("Welcome "+uname+",");
 
 
-        AsyncTask task = new SoapCall_GetPatients(Doctor_homePage.this,String.valueOf(hospital_name),type_of_user,hospital_name,uname).execute();
+        do_syn=1;
+        hospital_name1=String.valueOf(hospital_name);
+        type_of_user1=type_of_user;
+        uname1=uname;
+
+        dhp=Doctor_homePage.this;
+
+
+        AsyncTask task = new SoapCall_GetPatients(Doctor_homePage.this,String.valueOf(hospital_name),type_of_user,hospital_name,uname,"No").execute();
+
+
+        syncPatientListThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        sleep(3000);
+                        if(do_syn==1) {
+                            dhp.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AsyncTask task = new SoapCall_GetPatients(dhp,hospital_name1,type_of_user1,hospital_name1,uname1,"Yes").execute();
+
+                                }
+                            });
+                            // System.out.println("thread updating");
+                        }else
+                        {
+                            break;
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        syncPatientListThread.start();
 
     }
 
@@ -310,6 +367,7 @@ public class Doctor_homePage extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(getApplicationContext(), LoginPage.class);
                                 startActivity(intent);
+                                do_syn=0;
                                 finish();
                             }
                         })
@@ -328,6 +386,28 @@ public class Doctor_homePage extends AppCompatActivity {
             e.printStackTrace();
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Logout ?")
+                .setMessage("Are you sure you want to Logout ?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+                        startActivity(intent);
+                        do_syn=0;
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
 }

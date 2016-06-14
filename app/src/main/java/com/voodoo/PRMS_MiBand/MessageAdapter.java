@@ -29,6 +29,7 @@ public class MessageAdapter extends BaseAdapter {
         messages = new ArrayList<Pair<String, Integer>>();
         messages_time=new ArrayList<String>();
         messages_uname=new ArrayList<String>();
+        Sender_Is_amb=new ArrayList<String>();
     }
 
     public void addMessage(String message,String Uname,String time,String Is_amb, int direction) {
@@ -89,7 +90,7 @@ public class MessageAdapter extends BaseAdapter {
         txtMessage2.setText(messages_time.get(i));
 
         if (direction == DIRECTION_INCOMING) {
-            if(Sender_Is_amb.equals("Yes")) {
+            if((Sender_Is_amb.get(i)).equals("Yes")) {
                 TextView txtMessage1 = (TextView) convertView.findViewById(R.id.doc_name);
                 txtMessage1.setText("Ambulance Staff");
             }else {

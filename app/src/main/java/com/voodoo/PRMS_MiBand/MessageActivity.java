@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.voodoo.GadgetBridgeFiles.GBApplication;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
@@ -63,9 +65,9 @@ class SoapCall_GetMessages extends AsyncTask<String, Integer, Long> {
     String Uname;
 
     MessageAdapter messageAdapter;
+    String Issilent;
 
-
-    SoapCall_GetMessages(MessageActivity ma,String Hospital_Name,String ambulance_id,String P_id,String Uname,MessageAdapter messageAdapter){
+    SoapCall_GetMessages(MessageActivity ma,String Hospital_Name,String ambulance_id,String P_id,String Uname,String Issilent,MessageAdapter messageAdapter){
         dialog = new ProgressDialog(ma);
         // dialog.setTitle("Processing...");
         dialog.setMessage(Html.fromHtml("Retrieving Messages. Please wait..."));
@@ -77,6 +79,7 @@ class SoapCall_GetMessages extends AsyncTask<String, Integer, Long> {
         this.ma=ma;
         this.messageAdapter=messageAdapter;
         this.Uname=Uname;
+        this.Issilent=Issilent;
     }
 
     @Override
@@ -85,25 +88,36 @@ class SoapCall_GetMessages extends AsyncTask<String, Integer, Long> {
             Check();
         }
         catch(Exception e){
-            ma.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast toast = Toast.makeText(ma.getApplicationContext(), "Some error occurred. Please try again", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            });
+            if(Issilent.equals("No")) {
+                ma.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast = Toast.makeText(ma.getApplicationContext(), "Some error occurred. Please try again", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
+            }
             e.printStackTrace();
         }
         return null;
     }
 
     protected void onPreExecute() {
-        dialog.show();
+        if(Issilent.equals("No"))
+        {
+            dialog.show();
+        }
     }
 
 
     protected void onPostExecute(Long result) {
-        dialog.dismiss();
+        if(Issilent.equals("No"))
+        {
+            dialog.dismiss();
+        }
+
+
+
     }
 
     Document get_Messages(){
@@ -168,8 +182,7 @@ class SoapCall_GetMessages extends AsyncTask<String, Integer, Long> {
 
     void Check()
     {
-
-        if(!isNetworkAvailable())
+        if(!isNetworkAvailable() &&Issilent.equals("No"))
         {
             ma.runOnUiThread(new Runnable() {
                 @Override
@@ -199,8 +212,9 @@ class SoapCall_GetMessages extends AsyncTask<String, Integer, Long> {
                     if(count>0)
                     {
 
-                        // ListView lv=(ListView) ma.findViewById(R.id.DoctorlistView);
-                        // lv.setAdapter(new Doctor_Patient_List_CustomAdapter(ma, PatientNameList, PatientCondList, AmbulanceList));
+                        MessageAdapter messageAdapter= new MessageAdapter(ma);
+                        ListView lv=ma.getMessagesList();
+
                         for(int i=0;i<count;i++)
                         {
                             S_uname=doc.getElementsByTagName("Message_" + i).item(0).getChildNodes().item(0).getChildNodes().item(0).getNodeValue();
@@ -225,11 +239,12 @@ class SoapCall_GetMessages extends AsyncTask<String, Integer, Long> {
                             System.out.println("\nS_uname: "+S_uname+" S_time: "+S_time+" R_hosp_name: "+R_hosp_name+" R_amb_id: "+R_amb_id+" R_pid: "+R_pid+" msg: "+msg+" Is_amb: "+Is_amb);
                         }
 
+                        ma.setMessageAdapter(messageAdapter);
+                        lv.setAdapter(ma.getMessageAdapter());
+
                      }
                 }else
                 {
-                    Toast toast = Toast.makeText(ma.getApplicationContext(), "Some error Occurred. Please try again", Toast.LENGTH_LONG);
-                    toast.show();
                 }
 
             }
@@ -440,6 +455,7 @@ public class MessageActivity extends AppCompatActivity {
     private String messageBody;
     private MessageAdapter messageAdapter;
     private ListView messagesList;
+    static MessageActivity ma;
 
 
     String type_of_user;
@@ -449,6 +465,31 @@ public class MessageActivity extends AppCompatActivity {
     String string_doc;
     String ambulance_id;
 
+
+    static String hospital_name1;
+    static String ambulance_id1;
+    static String P_id1;
+    static String uname1;
+
+    static Thread syncThread=null;
+
+    static int do_sync=0;
+
+    public MessageAdapter getMessageAdapter() {
+        return messageAdapter;
+    }
+
+    public void setMessageAdapter(MessageAdapter messageAdapter) {
+        this.messageAdapter = messageAdapter;
+    }
+
+    public void setMessagesList(ListView messagesList) {
+        this.messagesList = messagesList;
+    }
+
+    public ListView getMessagesList() {
+        return messagesList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -501,6 +542,7 @@ public class MessageActivity extends AppCompatActivity {
                 intent.putExtra("uname", uname);
                 intent.putExtra("P_id", P_id);
                 intent.putExtra("string_doc", string_doc);
+                do_sync=0;
                 startActivity(intent);
                 finish();
                 break;
@@ -516,6 +558,7 @@ public class MessageActivity extends AppCompatActivity {
         intent.putExtra("uname", uname);
         intent.putExtra("P_id", P_id);
         intent.putExtra("string_doc", string_doc);
+        do_sync=0;
         startActivity(intent);
         finish();
     }
@@ -527,7 +570,41 @@ public class MessageActivity extends AppCompatActivity {
         ListView messagesList = (ListView) findViewById(R.id.listMessages);
         messagesList.setAdapter(messageAdapter);
 
-        AsyncTask task = new SoapCall_GetMessages(MessageActivity.this,hospital_name,ambulance_id,P_id,uname,messageAdapter).execute();
+        do_sync=1;
+        hospital_name1=hospital_name;
+        ambulance_id1=ambulance_id;
+        P_id1=P_id;
+        uname1=uname;
+
+        ma=MessageActivity.this;
+        AsyncTask task = new SoapCall_GetMessages(MessageActivity.this,hospital_name,ambulance_id,P_id,uname,"No",messageAdapter).execute();
+
+
+        syncThread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        sleep(3000);
+                        if(do_sync==1) {
+                            ma.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AsyncTask task = new SoapCall_GetMessages(ma,hospital_name1,ambulance_id1,P_id1,uname1,"Yes",ma.getMessageAdapter()).execute();
+                                }
+                            });
+                           System.out.println("thread updating");
+                        }else
+                        {
+                            break;
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        syncThread.start();
 
        // messageAdapter.addMessage("Heloooz",uname,"3:12", MessageAdapter.DIRECTION_OUTGOING);
 
