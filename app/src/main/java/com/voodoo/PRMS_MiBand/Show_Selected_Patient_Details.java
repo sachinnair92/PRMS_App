@@ -63,6 +63,7 @@ public class Show_Selected_Patient_Details extends AppCompatActivity {
 
         ImageView hrt_img=(ImageView) findViewById(R.id.measureheartrate_image);
 
+        ImageView send_img=(ImageView) findViewById(R.id.sendmessage_image);
 
         System.out.println("P_id is " + P_id);
         ambulance_id=null;
@@ -104,6 +105,21 @@ public class Show_Selected_Patient_Details extends AppCompatActivity {
                 startActivity(intent);
                 finish();
 
+            }
+        });
+
+        send_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(),MessageActivity.class);
+                intent.putExtra("tou", type_of_user);
+                intent.putExtra("hospital_name",hospital_name);
+                intent.putExtra("uname", uname);
+                intent.putExtra("P_id",P_id);
+                intent.putExtra("string_doc",string_doc);
+                intent.putExtra("ambulance_id",ambulance_id);
+                startActivity(intent);
+                finish();
             }
         });
 

@@ -69,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="3:12 AM"
-                android:id="@+id/textView23"
+                android:id="@+id/msg_time"
                 android:textColor="#ada6a6"
                 android:layout_alignTop="@+id/txtMessage"
                 android:layout_alignParentEnd="true"

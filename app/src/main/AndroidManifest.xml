@@ -284,7 +284,11 @@
             android:name=".LoginPage"
             android:label="PRMS"
             android:theme="@style/VoodooLoginTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".RegisterPage"
@@ -310,11 +314,7 @@
             android:name=".ShowHeartRate"
             android:theme="@style/VoodooTheme"></activity>
         <activity android:name=".MessageActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

@@ -59,7 +59,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="3:12 AM"
                 android:layout_marginLeft="5dp"
-                android:id="@+id/textView25"
+                android:id="@+id/msg_time"
                 android:textColor="#ada6a6"
                 android:layout_below="@+id/txtMessage"
                 android:layout_alignParentStart="true" />

@@ -19,15 +19,21 @@ public class MessageAdapter extends BaseAdapter {
     public static final int DIRECTION_OUTGOING = 1;
 
     private List<Pair<String, Integer>> messages;
+    private ArrayList<String> messages_time;
+    private ArrayList<String> messages_uname;
     private LayoutInflater layoutInflater;
 
     public MessageAdapter(Activity activity) {
         layoutInflater = activity.getLayoutInflater();
         messages = new ArrayList<Pair<String, Integer>>();
+        messages_time=new ArrayList<String>();
+        messages_uname=new ArrayList<String>();
     }
 
-    public void addMessage(String message, int direction) {
+    public void addMessage(String message,String Uname,String time, int direction) {
         messages.add(new Pair(message, direction));
+        messages_time.add(time);
+        messages_uname.add(Uname);
         notifyDataSetChanged();
     }
 
@@ -77,9 +83,14 @@ public class MessageAdapter extends BaseAdapter {
         TextView txtMessage = (TextView) convertView.findViewById(R.id.txtMessage);
         txtMessage.setText(message);
 
+        TextView txtMessage2 = (TextView) convertView.findViewById(R.id.msg_time);
+        txtMessage2.setText(messages_time.get(i));
+
         if (direction == DIRECTION_INCOMING) {
             TextView txtMessage1 = (TextView) convertView.findViewById(R.id.doc_name);
-            txtMessage1.setText("balls");
+            txtMessage1.setText("Dr. "+messages_uname.get(i).toUpperCase());
+
+
         }
 
 
