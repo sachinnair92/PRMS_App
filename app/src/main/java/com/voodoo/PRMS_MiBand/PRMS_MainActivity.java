@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -563,7 +564,7 @@ public class PRMS_MainActivity extends GBActivity {
 
 
         TextView PatientIdText=(TextView) findViewById(R.id.PatientIdText);
-        PatientIdText.setText("Patient Id : "+P_id);
+        PatientIdText.setText("Patient Id : " + P_id);
         Button bt=(Button) findViewById(R.id.EditDetailsbutton);
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -580,12 +581,38 @@ public class PRMS_MainActivity extends GBActivity {
                 intent.putExtra("pt_gender", pt_gender);
                 intent.putExtra("pt_cond", pt_cond);
                 intent.putExtra("pt_policecase", pt_policecase);
-                is_connected=0;
+                is_connected = 0;
                 startActivity(intent);
                 finish();
 
             }
         });
+
+
+
+        ImageView im=(ImageView) findViewById(R.id.sendmessage_image);
+        im.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Amb_MessageActivity.class);
+                intent.putExtra("P_id", P_id);
+                intent.putExtra("tou", tou);
+                intent.putExtra("ambulance_id", ambulance_id);
+                intent.putExtra("hospital_name", hospital_name);
+                intent.putExtra("uname", uname);
+                intent.putExtra("pt_name", pt_name);
+                intent.putExtra("pt_bloodgrp", pt_bloodgrp);
+                intent.putExtra("pt_prob", pt_prob);
+                intent.putExtra("pt_gender", pt_gender);
+                intent.putExtra("pt_cond", pt_cond);
+                intent.putExtra("pt_policecase", pt_policecase);
+                is_connected = 0;
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

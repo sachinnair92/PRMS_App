@@ -70,4 +70,24 @@
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/textView3" />
 
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/sendmessage"
+        android:src="@drawable/message"
+        android:layout_above="@+id/last_measured_hr"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="104dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Send Doctor Message"
+        android:textColor="#b3325e"
+        android:id="@+id/textView23"
+        android:layout_marginTop="52dp"
+        android:layout_alignTop="@+id/sendmessage_image"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
