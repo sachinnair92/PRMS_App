@@ -521,6 +521,7 @@ public class Amb_MessageActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        getSupportActionBar().setTitle(Html.fromHtml("<small>Ambulance Activity</small>"));
 
         Intent i=getIntent();
 
